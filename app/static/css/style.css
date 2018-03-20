@@ -1,0 +1,24 @@
+.align-center{
+  text-align: center;
+}
+.align-padding{
+  padding: 0 4rem;
+}
+.board {
+  width: 384px;
+  height: 384px;
+  background: #f8f8f8;
+  margin: auto;
+  position: relative;
+  border: solid rgba(51, 51, 51, 0.6) 1px;
+}
+.remove-padding-top{
+  padding-top: 0;
+}
+.div-large{
+  width: 100%;
+}
+.padding-bottom{
+  padding-bottom: 1rem;
+}
+

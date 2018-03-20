@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mario Smart</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/uikit.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+</head>
+
+<body>
+  <div class="uk-container uk-container-large">
+    <div class="uk-flex uk-flex-center uk-margin-medium-top">
+      <section class="uk-width-1-2">
+        <h2 class="align-center">Menú</h2>
+        <dl class="uk-description-list uk-description-list-divider">
+          <dt class="padding-bottom">Load new world</dt>
+          <dd class="align-padding">
+            <!-- <form id="loadForm" action="upload" method=post enctype=multipart/form-data>
+              <div uk-form-custom class="div-large">
+                <input type="file" name="file" accept=".txt" id="fileInput">
+                <button class="uk-button uk-button-default uk-width-1-1 uk-margin-small-bottom" type="button" tabindex="-1" id="btnLoad">Load Scene</button>
+              </div>
+            </form> -->
+
+
+          </dd>
+          <dt class="padding-bottom">Select Algorithm</dt>
+          <dd class="align-padding">
+            <div class="uk-margin">
+              <select class="uk-select">
+                <option value="0">Algoritmo</option>
+                <option value="1">Algoritmo 1</option>
+                <option value="2">Algoritmo 1</option>
+                <option value="3">Algoritmo 1</option>
+                <option value="4">Algoritmo 1</option>
+              </select>
+            </div>
+            <button name="solve" class="uk-button uk-button-primary uk-width-1-1 uk-margin-small-bottom">
+              Solve
+            </button>
+          </dd>
+          <dt class="padding-bottom">Results</dt>
+          <dd>
+            <div>
+
+
+            </div>
+          </dd>
+        </dl>
+      </section>
+
+      <main class="uk-width-1-1 uk-padding uk-padding-remove-top">
+        <h1 class="align-center">Mario Smart</h1>
+        <div class="uk-card uk-card-default uk-card-body remove-padding-top">
+          <div class="game">
+            <canvas id='marioSmart' width='380' height='380'></canvas>
+          </div>
+        </div>
+        <footer>
+          <p>Created by
+            <a href="https://github.com/dejuata" target="_blank">Juan David Pino</a>
+          </p>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename = 'js/jquery-1.8.3.js') }}"></script>
+  <script src="{{ url_for('static', filename = 'js/jquery.ajaxSubmit.js') }}"></script>
+  <script src="{{ url_for('static', filename = 'js/uikit.min.js') }}"></script>
+  <script src="{{ url_for('static', filename = 'js/quintus-all.js') }}"></script>
+  <script src="{{ url_for('static', filename = 'js/game/scene.js') }}"></script>
+  <script src="{{ url_for('static', filename = 'js/game/main.js') }}"></script>
+
+</body>
+
+</html>
