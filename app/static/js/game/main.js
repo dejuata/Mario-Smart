@@ -7,7 +7,7 @@ $(document).ready(function () {
   const url = `${document.location.origin}/static/assets`
 
   // load state by default
-  gameDefault(url, 'level.json');
+  gameDefault(url, 'level1.json');
 
   // load new scene
   $('#file').on('change', function () {
