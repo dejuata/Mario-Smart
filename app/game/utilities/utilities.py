@@ -16,3 +16,13 @@ def format_data(str):
   # join the arr
   tmp = ['[{}]'.format(','.join(row)) for row in tmp]
   return '[{}]'.format(',\n'.join(tmp))
+
+def flat_slice(lst):
+  """
+  Flatten a list
+  """
+  lst = list(lst)
+  for i, _ in enumerate(lst):
+    while (hasattr(lst[i], "__iter__") and not isinstance(lst[i], basestring)):
+      lst[i:i + 1] = lst[i]
+  return lst

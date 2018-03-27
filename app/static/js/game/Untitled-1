@@ -1,0 +1,12 @@
+     // else if (Q.inputs['left']) {
+          //   if (!collision) {
+          //     p.vx = -p.speed;
+          //     p.vy = 0
+          //   }
+          // }
+          // else if (Q.inputs['right']) {
+          //   if (!collision) {
+          //     p.vx = p.speed;
+          //     p.vy = 0
+          //   }
+          // }

@@ -1,7 +1,7 @@
 $(document).ready(function () {
   // Submit form data for level game
   $('#upload').hide();
-  $('#game').show()
+  // $('#game').show()
 
   // resources statics
   const url = `${document.location.origin}/static/assets`
