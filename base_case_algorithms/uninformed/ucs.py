@@ -19,14 +19,13 @@ tree = {
 def uniform_cost_search(tree, start, goal):
   queue = Queue.PriorityQueue()
   queue.put((0, start))
-  end = False
 
-  while not end:
+  while True:
     cost, node = queue.get_nowait()
     print('Node: ', node)
     if node == goal:
-      end = True
       print('Goal:', node)
+      break
     else:
       children = tree[node]
       for child in children:

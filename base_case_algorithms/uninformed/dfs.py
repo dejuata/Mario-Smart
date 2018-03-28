@@ -34,16 +34,15 @@ tree1 = {
 def depth_first_search(tree, start, goal1, goal2=None):
   visited = set()
   stack = [start]
-  end = False
 
-  while stack and not end:
+  while stack:
     node = stack.pop(0)
     if node not in visited:
       visited.add(node)
     print('Node: ', node)
     if node == goal1 or node == goal2:
-      end = True
       print('Goal:', node)
+      break
     else:
       children = tree[node]
       print('Children: ', children)

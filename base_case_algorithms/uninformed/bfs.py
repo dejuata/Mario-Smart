@@ -33,14 +33,13 @@ tree1 = {
 
 def breadth_first_search(tree, start, goal1, goal2=None):
   queue = Queue.deque([start])
-  end = False
 
-  while queue and not end:
+  while queue:
     node = queue.popleft()
     print('Node: ', node)
     if node == goal1 or node == goal2:
-      end = True
       print('Goal:', node)
+      break
     else:
       children = tree[node]
       print('Children: ', children)
