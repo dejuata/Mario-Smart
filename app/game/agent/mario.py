@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 # Basado en https://www.cs.us.es/cursos/iati-2012/
 import numpy as np
-from copy import copy, deepcopy
-from utilities.utilities import flat_slice
+from copy import deepcopy
 
 
 class MarioSmart(object):
@@ -11,15 +10,13 @@ class MarioSmart(object):
   def __init__(self, initial, goal=None):
     self.initial = initial
     self.goal = goal
-    self.inmune = False
+    self.princess = self.find_position(self.initial, 5)
 
-  def actions(self, state):
+  def actions(self, state, mario):
     """
     Return the actions that can be executed in the given state
     """
-    possible_actions = ['UP', 'DOWN', 'LEFT', 'RIGHT']
-    # [y, x]
-    mario = self.find_position(state, 2)
+    possible_actions = ['Up', 'Down', 'Left', 'Right']
 
     x = mario[1]
     y = mario[0]
@@ -27,84 +24,79 @@ class MarioSmart(object):
     # check the free roads
     # UP
     if self.check_position(state=state, x=x, y=y-1) == 1:
-      possible_actions.remove('UP')
+      possible_actions.remove('Up')
     # DOWN
     if self.check_position(state=state, x=x, y=y+1) == 1:
-      possible_actions.remove('DOWN')
+      possible_actions.remove('Down')
     # LEFT
     if self.check_position(state=state, x=x-1, y=y) == 1:
-      possible_actions.remove('LEFT')
+      possible_actions.remove('Left')
     # RIGHT
     if self.check_position(state=state, x=x+1, y=y) == 1:
-      possible_actions.remove('RIGHT')
+      possible_actions.remove('Right')
 
     return possible_actions
 
-  def result_of_actions(self, state, action):
+  def result_of_actions(self, state, action, mario):
     """
     Return the new state that results from executing the action in the given state
     """
-    mario = self.find_position(state, 2)
-    x = mario[1]
-    y = mario[0]
+    x, y = mario[1], mario[0]
     new_state = deepcopy(state)
-
-    position = self.next_position(y=y, x=x, action=action)
+    position = self.next_position(mario, action)
 
     new_state[y][x] = 0
     new_state[position[0]][position[1]] = 2
-    # print(id(state), id(new_state))
-    # print(state, new_state)
+
     return new_state
 
-  def goal_test(self, state):
+  def goal_test(self, mario):
     """
     Return True if the state is a goal
     """
-    return state == self.goal
+    return self.princess == mario
 
-  def path_cost(self, c, state1, action, state2):
+  def path_cost(self, c, state1, action, state2, mario):
     """
     Return the cost of a solution path that arrives at state2 from
     state1 via action, assuming cost c to get up to state1.
     """
-    mario = self.find_position(state1, 2)
     x = mario[1]
     y = mario[0]
-    position = self.next_position(y=y, x=x, action=action)
+    position = self.next_position(mario, action)
     check = self.check_position(state=state1, y=position[0], x=position[1])
 
-    self.inmune = True if check == 3 else False
+    inmune = True if check == 3 else False
 
-    cost = 1
-    if self.inmune:
-      cost = 1
-    elif check == 4:
-      cost = 7
+    cost = 7 if check == 4 and not inmune else 1
 
     return c + cost
 
   @classmethod
   def find_position(self, state, object):
     matriz = np.array(state)
-    position = list(map(list, np.where(matriz==object)))
-    return flat_slice(position)
+    p = np.where(matriz==object)
+    return (p[0][0], p[1][0])
 
   @classmethod
   def check_position(self, state, x, y):
     return state[y][x]
 
   @classmethod
-  def next_position(self, y, x, action):
-    position = list()
+  def next_position(self, mario, action):
+    position = tuple()
 
-    if action == 'UP':
-      position = [y - 1, x]
-    elif action == 'DOWN':
-      position = [y + 1, x]
-    elif action == 'LEFT':
-      position = [y, x - 1]
-    elif action == 'RIGHT':
-      position = [y, x + 1]
+    y = mario[0]
+    x = mario[1]
+
+    if action == 'Up': position = (y - 1, x)
+    elif action == 'Down': position = (y + 1, x)
+    elif action == 'Left': position = (y, x - 1)
+    elif action == 'Right': position = (y, x + 1)
+    else: position = (y, x)
 
     return position
+
+
+
+

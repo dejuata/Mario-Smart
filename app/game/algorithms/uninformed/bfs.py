@@ -2,51 +2,31 @@
 # -*- coding: utf-8 -*-
 # Basado en https://es.wikipedia.org/wiki/B%C3%BAsquedas_no_informadas
 # y diapostivas Tema4.pdf del curso de Introducción de IA
+from agent.node import Node
+
 try:
     import Queue
 except ImportError:
-    # Python 3
     import queue as Queue
 
-tree = {
- 'H': ['A', 'B', 'C'],
- 'A': ['D', 'E'],
- 'B': ['F'],
- 'C': ['G', 'J'],
- 'D': ['K', 'L'],
- 'E': [],
- 'F': [],
- 'G': [],
- 'J': [],
- 'K': [],
- 'L': []
-}
+def breadth_first_search(mario):
+  queue = Queue.deque([Node(mario.initial)])
 
-tree1 = {
- 'Sibiu': ['Rimnicu', 'Fagaras'],
- 'Rimnicu': ['Craiova', 'Pitesti'],
- 'Craiova': ['Rimnicu', 'Pitesti'],
- 'Pitesti': ['Rimnicu', 'Craiova', 'Bucharest'],
- 'Fagaras': ['Sibiu', 'Bucharest'],
- 'Bucharest': []
-}
-
-def breadth_first_search(tree, start, goal1, goal2=None):
-  queue = Queue.deque([start])
-
-  while queue:
+  # Nose si a este se le puede agregar los
+  # nodos visitados para evitar que se devuelva
+  visited = set()
+  while queue :
     node = queue.popleft()
-    print('Node: ', node)
-    if node == goal1 or node == goal2:
-      print('Goal:', node)
-      break
+    visited.add(node.mario)
+    if mario.goal_test(node.mario):
+      return node
     else:
-      children = tree[node]
-      print('Children: ', children)
-      for child in children:
-        queue.append(child)
-        # print('Queue: ', queue)
+      for child in node.expand(mario):
+        if child.mario not in visited:
+          queue.append(child)
 
-# Test
-# breadth_first_search(tree, 'H', 'L', 'G')
-breadth_first_search(tree1, 'Sibiu', 'Bucharest')
+  return None
+
+
+
+

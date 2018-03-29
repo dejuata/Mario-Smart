@@ -2,55 +2,25 @@
 # -*- coding: utf-8 -*-
 # Basado en http://cyluun.github.io/blog/uninformed-search-algorithms-in-python
 # y diapostivas Tema4.pdf del curso de Introducción de IA
+from agent.node import Node
 try:
     import Queue
 except ImportError:
     # Python 3
     import queue as Queue
 
-tree = {
- 'H': ['A', 'B', 'C'],
- 'A': ['D', 'E'],
- 'B': ['F'],
- 'C': ['G', 'J'],
- 'D': ['K', 'L'],
- 'E': [],
- 'F': [],
- 'G': [],
- 'J': [],
- 'K': [],
- 'L': []
-}
-
-tree1 = {
- 'Sibiu': ['Rimnicu', 'Fagaras'],
- 'Rimnicu': ['Craiova', 'Pitesti'],
- 'Craiova': ['Rimnicu', 'Pitesti'],
- 'Pitesti': ['Rimnicu', 'Craiova', 'Bucharest'],
- 'Fagaras': ['Sibiu', 'Bucharest'],
- 'Bucharest': []
-}
-
-def depth_first_search(tree, start, goal1, goal2=None):
+def depth_first_search(mario):
+  stack = [Node(mario.initial)]
   visited = set()
-  stack = [start]
 
   while stack:
     node = stack.pop(0)
-    if node not in visited:
-      visited.add(node)
-    print('Node: ', node)
-    if node == goal1 or node == goal2:
-      print('Goal:', node)
-      break
+    visited.add(node.mario)
+    if mario.goal_test(node.mario):
+      return node
     else:
-      children = tree[node]
-      print('Children: ', children)
+      children = node.expand(mario)
       for child in reversed(children):
-        if child not in visited:
+        if child.mario not in visited:
           stack.insert(0, child)
-      # print('Stack: ', stack)
 
-# Test
-# depth_first_search(tree, 'H', 'L', 'G')
-depth_first_search(tree1, 'Sibiu', 'Bucharest')
