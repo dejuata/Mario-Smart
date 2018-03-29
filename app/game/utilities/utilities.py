@@ -1,3 +1,6 @@
+
+from time import time
+
 def format_data(str):
   """
   Gives the required format to load a game scene
@@ -26,3 +29,4 @@ def flat_slice(lst):
     while (hasattr(lst[i], "__iter__") and not isinstance(lst[i], basestring)):
       lst[i:i + 1] = lst[i]
   return lst
+

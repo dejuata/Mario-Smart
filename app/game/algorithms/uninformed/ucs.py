@@ -2,38 +2,30 @@
 # -*- coding: utf-8 -*-
 # Basado en http://cyluun.github.io/blog/uninformed-search-algorithms-in-python
 # y diapostivas Tema4.pdf del curso de Introducción de IA
+from agent.node import Node
 try:
     import Queue
 except ImportError:
     # Python 3
     import queue as Queue
 
-tree = {
- 'Sibiu': [(80, 'Rimnicu'), (99, 'Fagaras')],
- 'Rimnicu': [(97, 'Pitesti'), (146, 'Craiova')],
- 'Craiova': [(138, 'Pitesti')],
- 'Pitesti': [(138, 'Craiova'), (101, 'Bucharest')],
- 'Fagaras': [(211, 'Bucharest')]
-}
 
-def uniform_cost_search(tree, start, goal):
+def uniform_cost_search(mario):
   queue = Queue.PriorityQueue()
-  queue.put((0, start))
+  queue.put((0, Node(mario.initial)))
+  visited = set()
+  count = 0
 
-  while True:
+  while queue:
     cost, node = queue.get_nowait()
-    print('Node: ', node)
-    if node == goal:
-      print('Goal:', node)
-      break
+    visited.add(node.mario)
+    if mario.goal_test(node.mario):
+      return node, count
     else:
-      children = tree[node]
-      for child in children:
-        total_cost = cost + child[0]
-        print('Child: ', (total_cost, child[1]))
-        queue.put((total_cost, child[1]))
+      for child in node.expand(mario):
+        if child.mario not in visited:
+          queue.put((child.path_cost, child))
+          count += 1
 
+  return None
 
-
-# Test
-uniform_cost_search(tree, 'Sibiu', 'Bucharest')

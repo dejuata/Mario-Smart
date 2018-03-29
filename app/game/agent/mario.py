@@ -71,6 +71,16 @@ class MarioSmart(object):
 
     return c + cost
 
+  def h(self, node):
+    """
+    h(n) = Sum of the horizontal and vertical distances to reach the goal
+    Manhattan distance
+    """
+    y1, x1 = node.mario
+    y2, x2 = self.princess
+
+    return abs(x2 - x1) + abs(y2 - y1)
+
   @classmethod
   def find_position(self, state, object):
     matriz = np.array(state)

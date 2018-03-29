@@ -1,38 +1,30 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Basado en diapostivas Tema5.pdf del curso de Introducción de IA
+from agent.node import Node
 try:
     import Queue
 except ImportError:
     # Python 3
     import queue as Queue
 
-tree = {
- 'Arad': [(253, 'Sibiu'), (329, 'Timisoara'), (374, 'Zerind')],
- 'Sibiu': [(366, 'Arad'), (380, 'Oradea'), (193, 'Rimnicu'), (178, 'Fagaras')],
- 'Timisoara': [(366, 'Arad'), (244, 'Lugoj')],
- 'Zerind': [(366, 'Arad'), (380, 'Oradea')],
- 'Oradea': [(374, 'Zerind'), (253, 'Sibiu')],
- 'Rimnicu': [(253, 'Sibiu'), (98, 'Pitesti'), (160, 'Craiova')],
- 'Pitesti': [(193, 'Rimnicu'), (160, 'Craiova'),(0, 'Bucharest')],
- 'Fagaras': [(253, 'Sibiu'),(0, 'Bucharest')]
-}
-
-def avara_search(tree, start, h):
+def avara_search(mario):
   queue = Queue.PriorityQueue()
-  queue.put((h, start))
+  node = Node(mario.initial)
+  h = mario.h(node)
+  queue.put((h, node))
+  visited = set()
+  count = 0
 
-  while True:
+  while queue:
     heuristic, node = queue.get_nowait()
-    print('Node: ', node)
-    if heuristic == 0:
-      print('Goal:', node)
-      break
+    visited.add(node.mario)
+    if  mario.goal_test(node.mario):
+      return node, count
     else:
-      children = tree[node]
-      for child in children:
-        print('Child: ', child)
-        queue.put(child)
+      for child in node.expand(mario):
+        if child.mario not in visited:
+          queue.put((mario.h(child), child))
+          count += 1
 
-# Test
-avara_search(tree, 'Arad', 366)
+  return None

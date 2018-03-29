@@ -12,15 +12,17 @@ except ImportError:
 def depth_first_search(mario):
   stack = [Node(mario.initial)]
   visited = set()
+  count = 0
 
   while stack:
     node = stack.pop(0)
     visited.add(node.mario)
     if mario.goal_test(node.mario):
-      return node
+      return node, count
     else:
       children = node.expand(mario)
       for child in reversed(children):
         if child.mario not in visited:
           stack.insert(0, child)
+          count += 1
 

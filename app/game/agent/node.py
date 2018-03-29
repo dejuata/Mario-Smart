@@ -43,12 +43,12 @@ class Node:
     return Node(
       state=next_node,
       parent=self,
-      action=action,
+      action = action,
       path_cost = problem.path_cost(
         c = self.path_cost,
         state = self.state,
         action = action,
-        mario = self.mario,
+        mario = self.mario
       )
     )
 
@@ -62,9 +62,10 @@ class Node:
     """
     Return a list of nodes forming the path from the root to this node.
     """
-    node, path_back = self, []
+    node, path_back, cost = self, [], []
     while node:
         path_back.append(node)
+        cost.append(node.path_cost)
         node = node.parent
     return list(reversed(path_back))
 
