@@ -1,39 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 # Basado en https://www.cs.us.es/cursos/iati-2012/
-
-class MarioSmart(object):
-
-  def __init__(self, initial, goal=None):
-    self.initial = initial
-    self.goal = goal
-
-  def actions(self, state):
-    """
-    Return the actions that can be executed in the given state
-    """
-    pass
-
-  def result_of_actions(self, state, action):
-    """
-    Return the state that results from executing the in the given state
-    """
-    pass
-
-  def goal_test(self, state):
-    """
-    Return True if the state is a goal
-    """
-    return state == self.goal
-
-  def path_cost(self, c, state1, action, state2):
-    """
-    Return the cost of a solution path that arrives at state2 from
-    state1 via action, assuming cost c to get up to state1.
-    """
-    return c + 1
-
+from mario import MarioSmart
+from utilities.utilities import flat_slice
 
 class Node:
   """
@@ -55,7 +24,7 @@ class Node:
       self.depth = parent.depth + 1
 
   def __repr__(self):
-    return "<Nodo {}>".format(self.state)
+    return "<Node {}>".format(self.state)
 
   def __lt__(self, node):
     return self.state < node.state
@@ -70,12 +39,12 @@ class Node:
     """
     Successor of a node by an applicable action
     """
-    next_node = problem.result(self.state, action)
+    next_node = problem.result_of_actions(self.state, action)
     return Node(
-      next_node,
-      self,
-      action,
-      problem.path_cost(self.path_cost, self.state, action, next_node)
+      state=next_node,
+      parent=self,
+      action=action,
+      path_cost=problem.path_cost(self.path_cost, self.state, action, next_node)
     )
 
   def solution(self):
@@ -100,4 +69,33 @@ class Node:
   def __hash__(self):
     return hash(self.state)
 
+# Test
+"""
+initial_state = [
+  [1, 1, 1, 1, 1],
+  [1, 1, 4, 3, 1],
+  [1, 1, 4, 1, 1],
+  [1, 1, 2, 1, 1],
+  [1, 1, 1, 1, 1]
+]
 
+mario = MarioSmart(initial_state)
+root = Node(mario.initial)
+
+# children 1
+children1 = root.expand(mario)
+for child in children1:
+  print('depth: {}, cost: {}'.format(child.depth, child.path_cost))
+
+# children2
+children2 = [child.expand(mario) for child in children1]
+children2 = flat_slice(children2)
+for child in children2:
+  print('depth: {}, cost: {}'.format(child.depth, child.path_cost))
+
+# children3
+children3 = [child.expand(mario) for child in children2]
+children3 = flat_slice(children3)
+for child in children3:
+  print('depth: {}, cost: {}'.format(child.depth, child.path_cost))
+"""
