@@ -21,15 +21,18 @@ initial_state = [
   [1, 1, 1, 1, 1],
   [1, 4, 5, 4, 1],
   [1, 4, 1, 4, 1],
-  [1, 0, 2, 3, 1],
+  [1, 3, 2, 3, 1],
   [1, 1, 1, 1, 1]
 ]
 
 
 mario = MarioSmart(initial_state)
 result = bfs.breadth_first_search(mario)
-print(result.solution())
+print(result.solution(), result.path_cost)
 
+# el orden de los operadores afecta el resultado
+result1 = dfs.depth_first_search(mario)
+print(result1.solution(), result1.path_cost)
 
 # hijos = node.expand(mario)
 # for hijo in hijos:
@@ -41,7 +44,5 @@ print(result.solution())
 #   print(mario.goal_test(hijo.mario))
 
 
-# el orden de los operadores afecta el resultado
-# result1 = dfs.depth_first_search(mario)
-# print(result1.solution(), result1.path_cost)
+
 

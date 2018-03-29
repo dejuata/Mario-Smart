@@ -46,6 +46,7 @@ class MarioSmart(object):
     position = self.next_position(mario, action)
 
     new_state[y][x] = 0
+
     new_state[position[0]][position[1]] = 2
 
     return new_state
@@ -56,19 +57,17 @@ class MarioSmart(object):
     """
     return self.princess == mario
 
-  def path_cost(self, c, state1, action, state2, mario):
+  def path_cost(self, c, state, action, mario):
     """
-    Return the cost of a solution path that arrives at state2 from
-    state1 via action, assuming cost c to get up to state1.
+    Return the cost of a solution path that arrives at state
+    via action, assuming cost c to get up to state.
     """
     x = mario[1]
     y = mario[0]
     position = self.next_position(mario, action)
-    check = self.check_position(state=state1, y=position[0], x=position[1])
+    check = self.check_position(state=state, y=position[0], x=position[1])
 
-    inmune = True if check == 3 else False
-
-    cost = 7 if check == 4 and not inmune else 1
+    cost = 7 if check == 4 else 1
 
     return c + cost
 

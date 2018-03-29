@@ -44,7 +44,12 @@ class Node:
       state=next_node,
       parent=self,
       action=action,
-      path_cost=problem.path_cost(self.path_cost, self.state, action, next_node, self.mario)
+      path_cost = problem.path_cost(
+        c = self.path_cost,
+        state = self.state,
+        action = action,
+        mario = self.mario,
+      )
     )
 
   def solution(self):
