@@ -27,3 +27,8 @@
 .title{
   font-size: 1rem !important;
 }
+.uk-button-group{
+  justify-content: center;
+  width: 100%;
+  padding: 1rem 0;
+}

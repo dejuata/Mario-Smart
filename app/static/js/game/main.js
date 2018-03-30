@@ -7,7 +7,23 @@ $(document).ready(function () {
   const url = `${document.location.origin}/static/assets`
 
   // load state by default
-  gameDefault(url, 'level1.json');
+  gameDefault(url, 'level1');
+  // save the current level
+  let currentLevel = 'level1';
+
+  // change of level
+  $('#level1').on('click', function () {
+    gameDefault(url, 'level1');
+    currentLevel = 'level1';
+  });
+  $('#level2').on('click', function () {
+    gameDefault(url, 'level2');
+    currentLevel = 'level2';
+  })
+  $('#level3').on('click', function () {
+    gameDefault(url, 'level3');
+    currentLevel = 'level3';
+  })
 
   // load new scene
   $('#file').on('change', function () {
@@ -41,7 +57,7 @@ $(document).ready(function () {
           data: { level: e.target.result },
           success: function (returned_data) {
             setUploadForm();
-            gameDefault(url, 'load.json')
+            gameDefault(url, 'load')
             console.log(returned_data);
           },
           error: function () {
@@ -52,7 +68,6 @@ $(document).ready(function () {
       });
     }
   });
-  // end load new scene
 
   // send value of input select
   /*
@@ -66,21 +81,29 @@ $(document).ready(function () {
     $.ajax({
       url: '/game',
       type: 'POST',
-      data: { option: $('#algoritm').val() },
+      data: {
+        option: $('#algoritm').val(),
+        level: currentLevel
+      },
       success: function (data) {
-        data = JSON.parse(data)
-        mov = data['mov'].join(', ')
-        moves = `<p>${mov}</p>`
-        report = `<p>Expanded nodes: ${data['node']}</p>
-        <p>Depth: ${data['depth']}</p>
-        <p>Computation time: ${data['compute']}</p> `
-        $('#report').append($.parseHTML(report))
-        $('#moves').append($.parseHTML(moves))
+        data = JSON.parse(data);
+        insertResults(data);
+        gameDefault(url, currentLevel, false, data);
       },
       error: function () {
         console.log('sorry...');
       }
     });
   });
+
+  function insertResults(data) {
+    mov = data['mov'].join(', ')
+    moves = `<p>${mov}</p>`
+    report = `<p>Expanded nodes: ${data['node']}</p>
+        <p>Depth: ${data['depth']}</p>
+        <p>Computation time: ${data['compute']}</p> `
+    $('#report').append($.parseHTML(report))
+    $('#moves').append($.parseHTML(moves))
+  }
 
 });

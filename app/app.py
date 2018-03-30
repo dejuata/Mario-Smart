@@ -31,7 +31,8 @@ def upload():
 def game():
   if request.method == 'POST':
     option = request.form['option']
-    result = run_search(option)
+    level = request.form['level']
+    result = run_search(option, level)
     return json.dumps(result)
 
 def run_search(option, name='level1'):

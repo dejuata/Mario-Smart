@@ -1,14 +1,15 @@
-function gameDefault(url, map = 'level.json') {
+function gameDefault(url, map, manual = true, data=null) {
 
-
+  let file = map + '.json'
   let Q = window.Q = Quintus({
       development: true,
       imagePath: `${url}/images/`,
       dataPath: `${url}/data/`
     })
-    .include("Sprites, Scenes, Input, 2D, Anim")
+    .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
     .setup('marioSmart')
-    .controls(true);
+    .controls(true)
+    .touch();
 
   // Add in the default keyboard controls
   // along with joypad controls for touch
@@ -69,7 +70,7 @@ function gameDefault(url, map = 'level.json') {
       posY: 0,
       oX: 0,
       oY: 0,
-      move: ['down', 'down', 'right', 'down', 'right', 'right', 'down', 'right', 'right', 'up', 'up', 'up', 'left', 'left', 'up', 'up', 'right', 'up', 'right', 'right', 'right', 'down', 'right', 'right']
+      move: data ? data['mov'] : []
     },
     // Arreglar las condiciones no ejecuta el ultmo down
     added: function () {
@@ -78,7 +79,7 @@ function gameDefault(url, map = 'level.json') {
       p.posY = this.entity.p.y;
       p.oX = this.entity.p.x;
       p.oY = this.entity.p.y;
-      p.direction = 'right';
+      p.direction = null;
       Q._defaults(p, this.defaults);
       this.entity.on("step", this, "step");
     },
@@ -103,6 +104,8 @@ function gameDefault(url, map = 'level.json') {
             p.posY = p.oY - 32;
             p.direction = 'up';
           }
+        } else {
+          p.direction = null
         }
 
         switch (p.move[0]) {
@@ -122,7 +125,6 @@ function gameDefault(url, map = 'level.json') {
 
         if (p.posY >= p.y) {
           if (p.direction == 'up') {
-            console.log(1)
             p.oY = p.posY;
             p.y = p.posY;
             p.vy = 0;
@@ -132,7 +134,6 @@ function gameDefault(url, map = 'level.json') {
         }
         if (p.posY <= p.y) {
           if (p.direction == 'down') {
-            console.log(2)
             p.oY = p.posY;
             p.y = p.posY;
             p.vy = 0;
@@ -142,7 +143,6 @@ function gameDefault(url, map = 'level.json') {
         }
         if (p.posX <= p.x) {
           if (p.direction  == 'right') {
-            console.log(3)
             p.oX = p.posX;
             p.x = p.posX;
             p.vx = 0;
@@ -152,7 +152,6 @@ function gameDefault(url, map = 'level.json') {
         }
         if (p.posX >= p.x){
           if (p.direction == 'left') {
-            console.log(4)
             p.oX = p.posX;
             p.x = p.posX;
             p.vx = 0;
@@ -170,15 +169,29 @@ function gameDefault(url, map = 'level.json') {
         sheet: "player",
         sprite: "player",
         type: SPRITE_PLAYER,
-        collisionMask: SPRITE_TILES | SPRITE_ENEMY,
+        collisionMask: SPRITE_TILES,
+        direction: null,
       });
-      this.add("2d, autoControls, animation");
+      if (manual) {
+        this.add("2d, manualControls, animation");
+      } else {
+        this.add("2d, autoControls, animation");
+      }
+
+      this.on("hit.sprite", this, 'hit');
     },
     step: function (dt) {
       if (this.p.vx > 0) {
         this.play("walk_right");
       } else if (this.p.vx < 0) {
         this.play("walk_left");
+      }
+    },
+    hit: function (col) {
+      if (col.obj.isA("Princess")) {
+        Q.stageScene("endGame", 1, { label: "You Won!" });
+        col.obj.destroy();
+        this.destroy();
       }
     }
   });
@@ -216,16 +229,16 @@ function gameDefault(url, map = 'level.json') {
         sheet: "enemy",
         sprite: "enemy",
         type: SPRITE_ENEMY,
-        collisionMask: SPRITE_PLAYER | SPRITE_TILES
+        collisionMask: SPRITE_TILES
       });
       this.add("2d, animation");
       this.on("hit.sprite", this, "hit");
       this.play('walk');
     },
     hit: function (col) {
-      if (col.obj.isA("Player")) {
-        this.destroy();
-      }
+      // if (col.obj.isA("Player")) {
+      //   this.destroy();
+      // }
     }
   });
 
@@ -239,10 +252,10 @@ function gameDefault(url, map = 'level.json') {
   }
 
   Q.TileLayer.extend("marioMap", {
-    init: function () {
+    init: function (data) {
       this._super({
         type: SPRITE_TILES,
-        dataAsset: map,
+        dataAsset: data,
         sheet: 'tiles',
       });
     },
@@ -274,15 +287,48 @@ function gameDefault(url, map = 'level.json') {
         }
       }
     }
-
   });
 
-  Q.scene("level1", function (stage) {
-    var level = stage.collisionLayer(new Q.marioMap());
+  Q.scene("level", function (stage) {
+    var level = stage.collisionLayer(new Q.marioMap(file));
     level.setup();
   });
 
-  Q.load(`sprites.png, sprites.json, ${map}, tiles.png`, function () {
+
+  Q.scene('endGame', function (stage) {
+
+    var container = stage.insert(new Q.UI.Container({
+      fill: "rgba(0,0,0,0.5)",
+      y: Q.width / 2,
+      x: Q.width / 2
+    }));
+
+
+    var button = container.insert(new Q.UI.Button({
+      x: 0,
+      y: 0,
+      fill: "rgb(204, 204, 204)",
+      border: 1,
+      shadow: 2,
+      shadowColor: "rgba(0,0,0,0.5)",
+      label: "Play again!"
+    }))
+
+    var label = container.insert(new Q.UI.Text({
+      x: 10,
+      y: -10 - button.p.h,
+      label: stage.options.label
+    }));
+
+    button.on("click", function () {
+      Q.clearStages();
+      Q.stageScene('level');
+    });
+
+    container.fit(20,20);
+  });
+
+  Q.load(`sprites.png, sprites.json, ${file}, tiles.png`, function () {
     Q.sheet("tiles", "tiles.png", {
       tileW: 32,
       tileH: 32
@@ -321,6 +367,7 @@ function gameDefault(url, map = 'level.json') {
       },
     });
 
-    Q.stageScene("level1");
+    Q.stageScene("level");
+
   });
 }
