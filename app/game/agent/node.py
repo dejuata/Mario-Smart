@@ -13,13 +13,14 @@ class Node:
   • El costo de la ruta desde la raíz hasta el nodo
   """
 
-  def __init__(self, state, parent=None, action=None, path_cost=0):
+  def __init__(self, state, parent=None, action=None, path_cost=0, inmune=False):
     self.state = state
     self.parent = parent
     self.action = action
     self.path_cost = path_cost
     self.depth = 0
     self.mario = self.find_mario(self.state)
+    self.inmune = inmune
     if parent:
       self.depth = parent.depth + 1
 
@@ -39,7 +40,10 @@ class Node:
     """
     Successor of a node by an applicable action
     """
-    next_node = problem.result_of_actions(self.state, action, self.mario)
+    result = problem.result_of_actions(self.state, action, self.mario)
+    next_node = result
+    if result is tuple:
+      next_node = result[0]
     return Node(
       state=next_node,
       parent=self,
@@ -51,6 +55,7 @@ class Node:
         mario = self.mario
       )
     )
+
 
   def solution(self):
     """

@@ -44,10 +44,13 @@ class MarioSmart(object):
     x, y = mario[1], mario[0]
     new_state = deepcopy(state)
     position = self.next_position(mario, action)
-
     new_state[y][x] = 0
-
     new_state[position[0]][position[1]] = 2
+
+    # check if in the action you find a flower
+    if self.check_position(state=state, y=position[0], x=position[1]) == 3:
+      inmune = True
+      return new_state, inmune
 
     return new_state
 

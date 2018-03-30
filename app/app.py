@@ -49,7 +49,7 @@ def run_search(option, name='level1'):
     result = avara.avara_search(mario)
   if option == '4':
     result = a_start.a_start_search(mario)
-  print(result[0].solution())
+
   return {
     'mov': result[0].solution(),
     'depth': result[0].depth,

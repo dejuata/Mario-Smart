@@ -51,31 +51,31 @@ level3 = [
 
 initial_state = [
   [1, 1, 1, 1, 1],
-  [1, 4, 5, 0, 1],
+  [1, 4, 5, 4, 1],
   [1, 4, 1, 4, 1],
-  [1, 2, 0, 3, 1],
+  [1, 3, 2, 0, 1],
   [1, 1, 1, 1, 1]
 ]
 
 
-mario = MarioSmart(level1)
+mario = MarioSmart(initial_state)
 
 # Busqueda por amplitud
-# start = time()
-# result = bfs.breadth_first_search(mario)
-# end = time() - start
-# compute = "{:.10f} s".format(end)
-
-# print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result[0].solution(), result[0].depth, result[1], compute))
-
-# # Busqueda por profundidad
-# el orden de los operadores afecta el resultado
 start = time()
-result1 = dfs.depth_first_search(mario)
+result = bfs.breadth_first_search(mario)
 end = time() - start
 compute = "{:.10f} s".format(end)
 
-print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result1[0].solution(), result1[0].depth, result1[1], compute))
+print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result[0].solution(), result[0].depth, result[1], compute))
+
+# # Busqueda por profundidad
+# el orden de los operadores afecta el resultado
+# start = time()
+# result1 = dfs.depth_first_search(mario)
+# end = time() - start
+# compute = "{:.10f} s".format(end)
+
+# print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result1[0].solution(), result1[0].depth, result1[1], compute))
 
 # # # Busqueda por costo uniforme
 # start = time()
