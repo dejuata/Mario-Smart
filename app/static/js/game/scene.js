@@ -23,159 +23,156 @@ function gameDefault(url, map = 'level.json') {
   let SPRITE_ENEMY = 4;
   let SPRITE_DOT = 8;
 
-  Q.component("marioControls", {
+  Q.component("manualControls", {
     defaults: {
       speed: 100,
-      collisions: [],
+    },
+    added: function () {
+      var p = this.entity.p;
+      Q._defaults(p, this.defaults);
+      this.entity.on("step", this, "step");
+    },
+    step: function (dt) {
+      var p = this.entity.p;
+
+      if (p.ignoreControls === undefined || !p.ignoreControls) {
+
+        if (Q.inputs['left']) {
+          p.direction = 'left';
+          p.vx = -p.speed;
+        } else if (Q.inputs['right']) {
+          p.direction = 'right';
+          p.vx = p.speed;
+        }
+        else {
+          p.vx = 0;
+        }
+        if (Q.inputs['down']) {
+          p.direction = 'down';
+          p.vy = p.speed;
+        } else if (Q.inputs['up']) {
+          p.direction = 'up';
+          p.vy = -p.speed;
+        }
+        else {
+          p.vy = 0;
+        }
+      }
+    }
+  });
+
+  Q.component("autoControls", {
+    defaults: {
+      speed: 100,
+      start: true,
       posX: 0,
       posY: 0,
       oX: 0,
       oY: 0,
-      moves: [
-        // ['down', 1],
-        // ['right', 1],
-        // ['down', 1],
-        // ['right', 2]
-        // ['down', 2],
-        // ['up', 2],
-        // ['right', 8],
-        // ['up', 3]
-
-      ],
-      // move: ['down', 'right', 'down'],
+      move: ['down', 'down', 'right', 'down', 'right', 'right', 'down', 'right', 'right', 'up', 'up', 'up', 'left', 'left', 'up', 'up', 'right', 'up', 'right', 'right', 'right', 'down', 'right', 'right']
     },
-
+    // Arreglar las condiciones no ejecuta el ultmo down
     added: function () {
       var p = this.entity.p;
-
       p.posX = this.entity.p.x;
       p.posY = this.entity.p.y;
-
       p.oX = this.entity.p.x;
       p.oY = this.entity.p.y;
-
-      p.direction = null;
-
+      p.direction = 'right';
       Q._defaults(p, this.defaults);
-
       this.entity.on("step", this, "step");
     },
 
     step: function (dt) {
       var p = this.entity.p;
-      console.log(p.moves)
-      console.log(p.move);
-
-      // if (p.ignoreControls === undefined || !p.ignoreControls) {
-      //   var collision = null;
-
-        // Follow along the current slope, if possible.
-        // if (p.collisions !== undefined && p.collisions.length > 0 && (Q.inputs['left'] || Q.inputs['right'] || Q.inputs['down'] || Q.inputs['up']) && (p.move[0] == 'down' || p.move[0] == 'up' || p.move[0] == 'left' || p.move[0] == 'right')) {
-        //   if (p.collisions.length === 1) {
-        //     collision = p.collisions[0];
-        //   } else {
-        //     collision = null;
-        //     for (var i = 0; i < p.collisions.length; i++) {
-        //       if (p.collisions[i].normalY < 0) {
-        //         collision = p.collisions[i];
-        //       }
-        //     }
-        //   }
-        // }
-
-        if (p.moves.length > 0) {
-          if (p.moves[0][0] == 'left') {
-            p.posX = p.oX - (32 * p.moves[0][1]);
+      if (p.ignoreControls === undefined || !p.ignoreControls) {
+        if (p.move.length > 0) {
+          if (p.move[0] == 'left') {
+            p.posX = p.oX - 32;
+            p.direction = 'left';
           }
-          if (p.moves[0][0] == 'right') {
-            p.posX = p.oX + (32 * p.moves[0][1]);
+          if (p.move[0] == 'right') {
+            p.posX = p.oX + 32;
+            p.direction = 'right';
           }
-          if (p.moves[0][0] == 'down') {
-            p.posY = p.oY + (32 * p.moves[0][1]);
+          if (p.move[0] == 'down') {
+            p.posY = p.oY + 32;
+            p.direction = 'down';
           }
-          if (p.moves[0][0] == 'up') {
-            p.posY = p.oY - (32 * p.moves[0][1]);
+          if (p.move[0] == 'up') {
+            p.posY = p.oY - 32;
+            p.direction = 'up';
           }
         }
 
         switch (p.move[0]) {
-          case "left":
-            p.vx = -p.speed;
-            p.vy = 0;
-            break;
-          case "right":
-            p.vx = p.speed;
-            p.vy = 0;
-            break;
           case "up":
             p.vy = -p.speed;
-            p.vx = 0;
             break;
           case "down":
             p.vy = p.speed;
-            p.vx = 0;
             break;
-          default:
-            p.vx = 0;
+          case "left":
+            p.vx = -p.speed;
+            break;
+          case "right":
+            p.vx = p.speed;
+            break;
+        }
+
+        if (p.posY >= p.y) {
+          if (p.direction == 'up') {
+            console.log(1)
+            p.oY = p.posY;
+            p.y = p.posY;
             p.vy = 0;
+            p.move.shift();
+            p.direction = null
+          }
         }
-        // right
-        if (p.posX < p.x) {
-          if (p.move[0] == 'right') {
+        if (p.posY <= p.y) {
+          if (p.direction == 'down') {
+            console.log(2)
+            p.oY = p.posY;
+            p.y = p.posY;
+            p.vy = 0;
+            p.move.shift();
+            p.direction = null
+          }
+        }
+        if (p.posX <= p.x) {
+          if (p.direction  == 'right') {
+            console.log(3)
             p.oX = p.posX;
+            p.x = p.posX;
+            p.vx = 0;
             p.move.shift();
-            p.moves.shift();
+            p.direction = null
           }
         }
-        // left
-        if (p.posX > p.x) {
-          if (p.move[0] == 'left') {
-            p.oX = p.posX
+        if (p.posX >= p.x){
+          if (p.direction == 'left') {
+            console.log(4)
+            p.oX = p.posX;
+            p.x = p.posX;
+            p.vx = 0;
             p.move.shift();
-            p.moves.shift();
+            p.direction = null
           }
         }
-        // down
-        if (p.posY < p.y) {
-          if (p.move[0] == 'down') {
-            p.oY = p.posY;
-            p.move.shift();
-            p.moves.shift();
-          }
-        }
-        // up
-        if (p.posY > p.y) {
-          if (p.move[0] == 'up') {
-            p.oY = p.posY;
-            p.move.shift();
-            p.moves.shift();
-          }
-        }
-        // En caso de colisiones
-        // if (p.collisions.length > 0) {
-        //   console.log('entro');
-        //   // p.move.shift();
-        //   // p.moves.shift();
-        // }
-      // }
+      }
     }
   });
-
 
   Q.Sprite.extend("Player", {
     init: function (p) {
       this._super(p, {
         sheet: "player",
         sprite: "player",
-        "w": 32,
-        "h": 32,
         type: SPRITE_PLAYER,
         collisionMask: SPRITE_TILES | SPRITE_ENEMY,
-        strength: 100,
-        direction: "right",
       });
-      // this.add("2d, marioControls, animation");
-      this.add("2d, animation")
+      this.add("2d, autoControls, animation");
     },
     step: function (dt) {
       if (this.p.vx > 0) {
@@ -208,14 +205,9 @@ function gameDefault(url, map = 'level.json') {
       this._super(Q._defaults(p, {
         sheet: 'princess',
         type: SPRITE_DOT,
-        // sensor: true
       }));
-      // this.on("sensor");
       this.add("2d");
     },
-    // sensor: function () {
-    //   this.destroy();
-    // },
   });
 
   Q.Sprite.extend("Enemy", {
@@ -227,8 +219,14 @@ function gameDefault(url, map = 'level.json') {
         collisionMask: SPRITE_PLAYER | SPRITE_TILES
       });
       this.add("2d, animation");
+      this.on("hit.sprite", this, "hit");
       this.play('walk');
     },
+    hit: function (col) {
+      if (col.obj.isA("Player")) {
+        this.destroy();
+      }
+    }
   });
 
   // Return a x and y location from a row and column

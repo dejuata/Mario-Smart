@@ -75,8 +75,6 @@ $(document).ready(function () {
         <p>Depth: ${data['depth']}</p>
         <p>Computation time: ${data['compute']}</p> `
         $('#report').append($.parseHTML(report))
-        console.log(data)
-        console.log(moves)
         $('#moves').append($.parseHTML(moves))
       },
       error: function () {

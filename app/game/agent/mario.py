@@ -16,7 +16,7 @@ class MarioSmart(object):
     """
     Return the actions that can be executed in the given state
     """
-    possible_actions = ['Up', 'Down', 'Left', 'Right']
+    possible_actions = ['up', 'down', 'left', 'right']
 
     x = mario[1]
     y = mario[0]
@@ -24,16 +24,16 @@ class MarioSmart(object):
     # check the free roads
     # UP
     if self.check_position(state=state, x=x, y=y-1) == 1:
-      possible_actions.remove('Up')
+      possible_actions.remove('up')
     # DOWN
     if self.check_position(state=state, x=x, y=y+1) == 1:
-      possible_actions.remove('Down')
+      possible_actions.remove('down')
     # LEFT
     if self.check_position(state=state, x=x-1, y=y) == 1:
-      possible_actions.remove('Left')
+      possible_actions.remove('left')
     # RIGHT
     if self.check_position(state=state, x=x+1, y=y) == 1:
-      possible_actions.remove('Right')
+      possible_actions.remove('right')
 
     return possible_actions
 
@@ -98,10 +98,10 @@ class MarioSmart(object):
     y = mario[0]
     x = mario[1]
 
-    if action == 'Up': position = (y - 1, x)
-    elif action == 'Down': position = (y + 1, x)
-    elif action == 'Left': position = (y, x - 1)
-    elif action == 'Right': position = (y, x + 1)
+    if action == 'up': position = (y - 1, x)
+    elif action == 'down': position = (y + 1, x)
+    elif action == 'left': position = (y, x - 1)
+    elif action == 'right': position = (y, x + 1)
     else: position = (y, x)
 
     return position
