@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 # Basado en http://cyluun.github.io/blog/uninformed-search-algorithms-in-python
 # y diapostivas Tema4.pdf del curso de Introducción de IA
-from agent.node import Node
+from game.agent.node import Node
+from time import time
+
 try:
     import Queue
 except ImportError:
@@ -11,6 +13,7 @@ except ImportError:
 
 
 def uniform_cost_search(mario):
+  start = time()
   queue = Queue.PriorityQueue()
   queue.put((0, Node(mario.initial)))
   visited = set()
@@ -20,7 +23,8 @@ def uniform_cost_search(mario):
     cost, node = queue.get_nowait()
     visited.add(node.mario)
     if mario.goal_test(node.mario):
-      return node, count
+      end = time() - start
+      return node, count, end
     else:
       for child in node.expand(mario):
         if child.mario not in visited:

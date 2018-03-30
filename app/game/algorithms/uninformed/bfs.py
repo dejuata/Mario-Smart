@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 # Basado en https://es.wikipedia.org/wiki/B%C3%BAsquedas_no_informadas
 # y diapostivas Tema4.pdf del curso de Introducción de IA
-from agent.node import Node
+from game.agent.node import Node
+from time import time
+
 try:
     import Queue
 except ImportError:
@@ -10,6 +12,7 @@ except ImportError:
 
 
 def breadth_first_search(mario):
+  start = time()
   queue = Queue.deque([Node(mario.initial)])
   visited = set()
   count = 0
@@ -18,7 +21,8 @@ def breadth_first_search(mario):
     node = queue.popleft()
     visited.add(node.mario)
     if mario.goal_test(node.mario):
-      return node, count
+      end = time() - start
+      return node, count, end
     else:
       for child in node.expand(mario):
         if child.mario not in visited:

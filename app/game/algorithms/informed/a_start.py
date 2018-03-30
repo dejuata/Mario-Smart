@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Basado en diapostivas Tema5.pdf del curso de Introducción de IA
-from agent.node import Node
+from game.agent.node import Node
+from time import time
+
 try:
     import Queue
 except ImportError:
@@ -9,6 +11,7 @@ except ImportError:
     import queue as Queue
 
 def a_start_search(mario):
+  start = time()
   queue = Queue.PriorityQueue()
   node = Node(mario.initial)
   f = node.path_cost + mario.h(node)
@@ -20,7 +23,8 @@ def a_start_search(mario):
     f, node = queue.get_nowait()
     visited.add(node.mario)
     if mario.goal_test(node.mario):
-      return node, count
+      end = time() - start
+      return node, count, end
     else:
       for child in node.expand(mario):
         if child.mario not in visited:

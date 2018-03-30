@@ -24,3 +24,6 @@
 .hide{
   display: none;
 }
+.title{
+  font-size: 1rem !important;
+}

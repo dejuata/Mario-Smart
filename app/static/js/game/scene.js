@@ -174,7 +174,8 @@ function gameDefault(url, map = 'level.json') {
         strength: 100,
         direction: "right",
       });
-      this.add("2d, marioControls, animation");
+      // this.add("2d, marioControls, animation");
+      this.add("2d, animation")
     },
     step: function (dt) {
       if (this.p.vx > 0) {

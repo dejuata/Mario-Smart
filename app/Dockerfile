@@ -1,10 +1,11 @@
-FROM alpine:3.1
+FROM python:3.6-alpine3.7
 
-RUN apk add --update python py-pip
+RUN apk --no-cache add --virtual .builddeps gcc gfortran musl-dev     && pip install numpy==1.14.0     && apk del .builddeps     && rm -rf /root/.cache
 
 WORKDIR /app
 
 ADD requirements.txt /app
+
 RUN pip install -r requirements.txt
 
 ADD . /app
