@@ -9,20 +9,23 @@ $(document).ready(function () {
   // load state by default
   gameDefault(url, 'level1');
   // save the current level
-  let currentLevel = 'level1';
+  var currentLevel = 'level1';
 
   // change of level
   $('#level1').on('click', function () {
     gameDefault(url, 'level1');
     currentLevel = 'level1';
+    clearReport();
   });
   $('#level2').on('click', function () {
     gameDefault(url, 'level2');
     currentLevel = 'level2';
+    clearReport();
   })
   $('#level3').on('click', function () {
     gameDefault(url, 'level3');
     currentLevel = 'level3';
+    clearReport();
   })
 
   // load new scene
@@ -34,6 +37,7 @@ $(document).ready(function () {
       $('#upload').hide();
       $('#fileInput').show();
     }
+
   });
 
   function setUploadForm() {
@@ -57,7 +61,10 @@ $(document).ready(function () {
           data: { level: e.target.result },
           success: function (returned_data) {
             setUploadForm();
+            clearReport();
+            currentLevel = 'load';
             gameDefault(url, 'load')
+
             console.log(returned_data);
           },
           error: function () {
@@ -68,7 +75,6 @@ $(document).ready(function () {
       });
     }
   });
-
   // send value of input select
   /*
   0 -> Breadth first search
@@ -78,6 +84,7 @@ $(document).ready(function () {
   4 -> A*
   */
   $('#play').on('click', function () {
+    console.log(currentLevel)
     $.ajax({
       url: '/game',
       type: 'POST',
@@ -97,6 +104,7 @@ $(document).ready(function () {
   });
 
   function insertResults(data) {
+    clearReport();
     mov = data['mov'].join(', ')
     moves = `<p>${mov}</p>`
     report = `<p>Expanded nodes: ${data['node']}</p>
@@ -104,6 +112,11 @@ $(document).ready(function () {
         <p>Computation time: ${data['compute']}</p> `
     $('#report').append($.parseHTML(report))
     $('#moves').append($.parseHTML(moves))
+  }
+
+  function clearReport() {
+    $('#report').empty()
+    $('#moves').empty()
   }
 
 });
