@@ -42,20 +42,23 @@ class Node:
     """
     result = problem.result_of_actions(self.state, action, self.mario)
     next_node = result
-    if result is tuple:
+    inmune = self.inmune
+    if type(result) is tuple:
       next_node = result[0]
+      inmune = True
     return Node(
       state=next_node,
       parent=self,
-      action = action,
+      action=action,
+      inmune=inmune,
       path_cost = problem.path_cost(
         c = self.path_cost,
         state = self.state,
         action = action,
-        mario = self.mario
+        mario = self.mario,
+        inmune=inmune
       )
     )
-
 
   def solution(self):
     """
@@ -81,5 +84,4 @@ class Node:
     matriz = np.array(state)
     p = np.where(matriz==2)
     return(p[0][0], p[1][0])
-
 

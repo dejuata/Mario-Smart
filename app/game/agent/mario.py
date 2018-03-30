@@ -47,10 +47,8 @@ class MarioSmart(object):
     new_state[y][x] = 0
     new_state[position[0]][position[1]] = 2
 
-    # check if in the action you find a flower
     if self.check_position(state=state, y=position[0], x=position[1]) == 3:
-      inmune = True
-      return new_state, inmune
+      return new_state, True
 
     return new_state
 
@@ -60,7 +58,7 @@ class MarioSmart(object):
     """
     return self.princess == mario
 
-  def path_cost(self, c, state, action, mario):
+  def path_cost(self, c, state, action, mario, inmune):
     """
     Return the cost of a solution path that arrives at state
     via action, assuming cost c to get up to state.
@@ -69,8 +67,7 @@ class MarioSmart(object):
     y = mario[0]
     position = self.next_position(mario, action)
     check = self.check_position(state=state, y=position[0], x=position[1])
-
-    cost = 7 if check == 4 else 1
+    cost = 7 if check == 4 and not inmune else 1
 
     return c + cost
 
@@ -108,7 +105,6 @@ class MarioSmart(object):
     else: position = (y, x)
 
     return position
-
 
 
 

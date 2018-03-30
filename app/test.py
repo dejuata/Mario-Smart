@@ -52,8 +52,8 @@ level3 = [
 initial_state = [
   [1, 1, 1, 1, 1],
   [1, 4, 5, 4, 1],
-  [1, 4, 1, 4, 1],
-  [1, 3, 2, 0, 1],
+  [1, 4, 1, 3, 1],
+  [1, 3, 2, 4, 1],
   [1, 1, 1, 1, 1]
 ]
 
@@ -61,12 +61,13 @@ initial_state = [
 mario = MarioSmart(initial_state)
 
 # Busqueda por amplitud
-start = time()
-result = bfs.breadth_first_search(mario)
-end = time() - start
-compute = "{:.10f} s".format(end)
+# start = time()
+result = ucs.uniform_cost_search(mario)
+print(result[0].solution(), result[0].path_cost)
+# end = time() - start
+# compute = "{:.10f} s".format(end)
 
-print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result[0].solution(), result[0].depth, result[1], compute))
+# print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result[0].solution(), result[0].depth, result[1], compute))
 
 # # Busqueda por profundidad
 # el orden de los operadores afecta el resultado
