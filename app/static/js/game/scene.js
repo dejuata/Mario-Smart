@@ -3,8 +3,10 @@ function gameDefault(url, map, manual = true, data=null) {
   let file = map + '.json'
   let Q = window.Q = Quintus({
       development: true,
+      audioSupported: ['wav', 'mp3', 'ogg'],
       imagePath: `${url}/images/`,
-      dataPath: `${url}/data/`
+      dataPath: `${url}/data/`,
+      audioPath: `${url}/audio/`
     })
     .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI")
     .setup('marioSmart')
@@ -394,14 +396,14 @@ function gameDefault(url, map, manual = true, data=null) {
     Q.animations("enemy", {
       walk: {
         frames: [0, 1],
-        rate: 1 / 3,
+        rate: 1 / 2.5,
         loop: true
       },
     });
 
     Q.animations("flower", {
       fire: {
-        frames: [0, 1, 2],
+        frames: [0, 1, 2, 3],
         rate: 1 / 3,
         loop: true
       },
