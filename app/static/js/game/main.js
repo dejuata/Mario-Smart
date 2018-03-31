@@ -90,14 +90,21 @@ $(document).ready(function () {
   3 -> Avara
   4 -> A*
   */
+ // Avoid returning
+  let back = 1
+  $('#back').on('change', function () {
+    back = $(this).is(':checked') ? 1 : 0
+  });
+
   $('#play').on('click', function () {
-    console.log(currentLevel)
+    console.log(back)
     $.ajax({
       url: '/game',
       type: 'POST',
       data: {
         option: $('#algoritm').val(),
-        level: currentLevel
+        level: currentLevel,
+        back: back
       },
       success: function (data) {
         data = JSON.parse(data);

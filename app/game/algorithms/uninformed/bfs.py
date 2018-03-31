@@ -11,15 +11,19 @@ except ImportError:
     import queue as Queue
 
 
-def breadth_first_search(mario):
+def breadth_first_search(mario, back):
   start = time()
   queue = Queue.deque([Node(mario.initial)])
   visited = set()
   count = 0
-
+  if back:
+    print('entro')
+  else:
+    print('no entro')
   while queue:
     node = queue.popleft()
-    visited.add(node.mario)
+    if back :
+      visited.add(node.mario)
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
@@ -28,6 +32,9 @@ def breadth_first_search(mario):
         if child.mario not in visited:
           queue.append(child)
           count += 1
+          print(count)
+
+
 
   return None
 

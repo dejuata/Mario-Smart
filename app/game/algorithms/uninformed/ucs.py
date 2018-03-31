@@ -12,7 +12,7 @@ except ImportError:
     import queue as Queue
 
 
-def uniform_cost_search(mario):
+def uniform_cost_search(mario, back):
   start = time()
   queue = Queue.PriorityQueue()
   queue.put((0, Node(mario.initial)))
@@ -20,8 +20,9 @@ def uniform_cost_search(mario):
   count = 0
 
   while queue:
-    cost, node = queue.get_nowait()
-    visited.add(node.mario)
+    cost, node=queue.get_nowait()
+    if back:
+      visited.add(node.mario)
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
@@ -30,6 +31,7 @@ def uniform_cost_search(mario):
         if child.mario not in visited:
           queue.put((child.path_cost, child))
           count += 1
+          print(count)
 
   return None
 

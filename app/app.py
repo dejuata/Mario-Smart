@@ -32,23 +32,25 @@ def game():
   if request.method == 'POST':
     option = request.form['option']
     level = request.form['level']
-    result = run_search(option, level)
+    back = int(request.form['back'])
+    result = run_search(option, back, level, )
     return json.dumps(result)
 
-def run_search(option, name='level1'):
+def run_search(option, back, name='level1',):
+  print(back, type(back))
   mario = MarioSmart(read_file(name))
   result = ''
 
   if option == '0':
-    result = bfs.breadth_first_search(mario)
+    result = bfs.breadth_first_search(mario, back)
   if option == '1':
     result = dfs.depth_first_search(mario)
   if option == '2':
-    result = ucs.uniform_cost_search(mario)
+    result = ucs.uniform_cost_search(mario, back)
   if option == '3':
-    result = avara.avara_search(mario)
+    result = avara.avara_search(mario, back)
   if option == '4':
-    result = a_start.a_start_search(mario)
+    result = a_start.a_start_search(mario, back)
 
   return {
     'mov': result[0].solution(),

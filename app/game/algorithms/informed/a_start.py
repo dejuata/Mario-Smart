@@ -10,7 +10,7 @@ except ImportError:
     # Python 3
     import queue as Queue
 
-def a_start_search(mario):
+def a_start_search(mario, back):
   start = time()
   queue = Queue.PriorityQueue()
   node = Node(mario.initial)
@@ -21,16 +21,18 @@ def a_start_search(mario):
 
   while queue:
     f, node = queue.get_nowait()
-    # visited.add(node.mario)
+    if back:
+      visited.add(node.mario)
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
     else:
       for child in node.expand(mario):
-        # if child.mario not in visited:
-        f = child.path_cost + mario.h(child)
-        queue.put((f, child))
-        count += 1
+        if child.mario not in visited:
+          f = child.path_cost + mario.h(child)
+          queue.put((f, child))
+          count += 1
+          print(count)
 
   return None
 

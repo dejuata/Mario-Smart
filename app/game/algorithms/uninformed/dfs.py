@@ -29,4 +29,5 @@ def depth_first_search(mario):
         if child.mario not in visited:
           stack.insert(0, child)
           count += 1
+          print(count)
 

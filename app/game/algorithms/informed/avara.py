@@ -10,7 +10,7 @@ except ImportError:
     # Python 3
     import queue as Queue
 
-def avara_search(mario):
+def avara_search(mario, back):
   start = time()
   queue = Queue.PriorityQueue()
   node = Node(mario.initial)
@@ -20,8 +20,9 @@ def avara_search(mario):
   count = 0
 
   while queue:
-    heuristic, node = queue.get_nowait()
-    visited.add(node.mario)
+    heuristic, node=queue.get_nowait()
+    if back:
+      visited.add(node.mario)
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
@@ -30,5 +31,6 @@ def avara_search(mario):
         if child.mario not in visited:
           queue.put((mario.h(child), child))
           count += 1
+          print(count)
 
   return None
