@@ -23,11 +23,10 @@ def depth_first_search(mario):
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
-    else:
-      children = node.expand(mario)
-      for child in reversed(children):
-        if child.mario not in visited:
-          stack.insert(0, child)
-          count += 1
-          print(count)
+    children = node.expand(mario)
+    for child in reversed(children):
+      if child.mario not in visited:
+        stack.insert(0, child)
+        count += 1
+        print(count)
 

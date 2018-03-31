@@ -16,10 +16,6 @@ def breadth_first_search(mario, back):
   queue = Queue.deque([Node(mario.initial)])
   visited = set()
   count = 0
-  if back:
-    print('entro')
-  else:
-    print('no entro')
   while queue:
     node = queue.popleft()
     if back :
@@ -27,16 +23,12 @@ def breadth_first_search(mario, back):
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
-    else:
-      for child in node.expand(mario):
-        if child.mario not in visited:
-          queue.append(child)
-          count += 1
-          print(count)
+    for child in node.expand(mario):
+      if child.mario not in visited:
+        queue.append(child)
+        count += 1
+        print(count)
 
-
-
-  return None
 
 
 

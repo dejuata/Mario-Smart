@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import os
 from flask import Flask, render_template, request, json
 from game.utilities.utilities import format_data
 import json
@@ -66,4 +67,4 @@ def read_file(name):
     return data
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.run(host='0.0.0.0')

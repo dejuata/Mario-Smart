@@ -20,17 +20,17 @@ def avara_search(mario, back):
   count = 0
 
   while queue:
-    heuristic, node=queue.get_nowait()
+
+    h, node=queue.get_nowait()
+    print(h , node)
     if back:
       visited.add(node.mario)
     if mario.goal_test(node.mario):
       end = time() - start
       return node, count, end
-    else:
-      for child in node.expand(mario):
-        if child.mario not in visited:
-          queue.put((mario.h(child), child))
-          count += 1
-          print(count)
+    for child in node.expand(mario):
+      if child.mario not in visited:
+        queue.put((mario.h(child), child))
+        count += 1
+        print(count)
 
-  return None
