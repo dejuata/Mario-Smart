@@ -171,6 +171,7 @@ function gameDefault(url, map, manual = true, data=null) {
         type: SPRITE_PLAYER,
         collisionMask: SPRITE_TILES,
         direction: null,
+        inmune: false
       });
       if (manual) {
         this.add("2d, manualControls, animation");
@@ -192,6 +193,18 @@ function gameDefault(url, map, manual = true, data=null) {
         Q.stageScene("endGame", 1, { label: "You Won!" });
         col.obj.destroy();
         this.destroy();
+      }
+      if (col.obj.isA("Flower")) {
+        this.p.inmune = true
+        this.p.sheet = 'inmune'
+      }
+      if (col.obj.isA("Enemy")) {
+        if (this.p.inmune) {
+          col.obj.destroy();
+        } else {
+          col.obj.p.opacity = .5
+          col.obj.p.collisionMask = null
+        }
       }
     }
   });
@@ -225,20 +238,15 @@ function gameDefault(url, map, manual = true, data=null) {
 
   Q.Sprite.extend("Enemy", {
     init: function (p) {
+
       this._super(p, {
-        sheet: "enemy",
+        sheet: p.sheet,
         sprite: "enemy",
-        type: SPRITE_ENEMY,
-        collisionMask: SPRITE_TILES
+        type: SPRITE_DOT,
+        sensor: true
       });
       this.add("2d, animation");
-      this.on("hit.sprite", this, "hit");
       this.play('walk');
-    },
-    hit: function (col) {
-      // if (col.obj.isA("Player")) {
-      //   this.destroy();
-      // }
     }
   });
 
@@ -252,11 +260,11 @@ function gameDefault(url, map, manual = true, data=null) {
   }
 
   Q.TileLayer.extend("marioMap", {
-    init: function (data) {
+    init: function (setup) {
       this._super({
         type: SPRITE_TILES,
-        dataAsset: data,
-        sheet: 'tiles',
+        dataAsset: setup.data,
+        sheet: setup.tile
       });
     },
     setup: function () {
@@ -268,6 +276,7 @@ function gameDefault(url, map, manual = true, data=null) {
         for (var x = 0; x < row.length; x++) {
           var tile = row[x];
 
+
           if (tile == 2) {
             this.stage.insert(new Q['Player'](Q.tilePos(x, y)));
             row[x] = 0;
@@ -277,11 +286,39 @@ function gameDefault(url, map, manual = true, data=null) {
             row[x] = 0;
           }
           if (tile == 4) {
-            this.stage.insert(new Q['Enemy'](Q.tilePos(x, y)));
+            let option = Q.tilePos(x, y);
+            if (map == 'level1') {
+              option['sheet'] = Math.random() >= .5 ? 'turtle1' : 'turtle2';
+            } else if (map == 'level2') {
+              option['sheet'] = Math.random() >= .5 ? 'goomba' : 'plant';
+            } else if (map == 'level3') {
+              if (Math.random() < .5) {
+                option['sheet'] = 'buzzy'
+              }else if (Math.random() > .5 && Math.random() < .8) {
+                option['sheet'] = 'turtle1'
+              }else if (Math.random() > .8 && Math.random() < 1) {
+                option['sheet'] = 'hammer'
+              } else {
+                option['sheet'] = 'plant'
+              }
+            }
+            this.stage.insert(new Q['Enemy'](option));
             row[x] = 0;
           }
           if (tile == 5) {
             this.stage.insert(new Q['Princess'](Q.tilePos(x, y)));
+            row[x] = 0;
+          }
+          if (tile == 8) {
+            let option = Q.tilePos(x, y);
+            option['sheet'] = 'boss';
+            this.stage.insert(new Q['Enemy'](option));
+            row[x] = 0;
+          }
+          if (tile == 9) {
+            let option = Q.tilePos(x, y);
+            option['sheet'] = 'start';
+            this.stage.insert(new Q['Flower'](option));
             row[x] = 0;
           }
         }
@@ -290,7 +327,13 @@ function gameDefault(url, map, manual = true, data=null) {
   });
 
   Q.scene("level", function (stage) {
-    var level = stage.collisionLayer(new Q.marioMap(file));
+    let setup = {
+      data: file
+    }
+    if (map == 'level1') { setup['tile'] = 'tile' }
+    if (map == 'level2') { setup['tile'] = 'tile1' }
+    if (map == 'level3') { setup['tile'] = 'tile2' }
+    var level = stage.collisionLayer(new Q.marioMap(setup));
     level.setup();
   });
 
@@ -328,11 +371,8 @@ function gameDefault(url, map, manual = true, data=null) {
     container.fit(20,20);
   });
 
-  Q.load(`sprites.png, sprites.json, ${file}, tiles.png`, function () {
-    Q.sheet("tiles", "tiles.png", {
-      tileW: 32,
-      tileH: 32
-    });
+  Q.load(`sprites.png, sprites.json, ${file}`, function () {
+
 
     Q.compileSheets("sprites.png", "sprites.json");
 

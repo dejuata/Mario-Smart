@@ -53,6 +53,7 @@ def run_search(option, name='level1'):
   return {
     'mov': result[0].solution(),
     'depth': result[0].depth,
+    'cost': result[0].path_cost,
     'node': result[1],
     'compute': "{:.10f} s".format(result[2])
   }

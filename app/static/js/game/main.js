@@ -1,4 +1,11 @@
 $(document).ready(function () {
+  $body = $("body");
+
+  $(document).on({
+    ajaxStart: function () { $body.addClass("loading"); },
+    ajaxStop: function () { $body.removeClass("loading"); }
+  });
+
   // Submit form data for level game
   $('#upload').hide();
   // $('#game').show()
@@ -109,7 +116,8 @@ $(document).ready(function () {
     moves = `<p>${mov}</p>`
     report = `<p>Expanded nodes: ${data['node']}</p>
         <p>Depth: ${data['depth']}</p>
-        <p>Computation time: ${data['compute']}</p> `
+        <p>Cost: ${data['cost']}</p>
+        <p>Computation time: ${data['compute']}</p>`
     $('#report').append($.parseHTML(report))
     $('#moves').append($.parseHTML(moves))
   }

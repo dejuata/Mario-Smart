@@ -7,7 +7,31 @@
     "tileh": 32,
     "frames": 3
   },
-  "enemy": {
+  "tile": {
+    "sx": 96,
+    "sy": -32,
+    "cols": 1,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 1
+  },
+  "tile1": {
+    "sx": 96,
+    "sy": 0,
+    "cols": 1,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 1
+  },
+  "tile2": {
+    "sx": 96,
+    "sy": 64,
+    "cols": 1,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 1
+  },
+  "turtle1": {
     "sx": 0,
     "sy": 32,
     "cols": 2,
@@ -26,9 +50,73 @@
   "flower": {
     "sx": 0,
     "sy": 64,
+    "cols": 4,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 4
+  },
+  "inmune": {
+    "sx": 0,
+    "sy": 96,
     "cols": 3,
     "tilew": 32,
     "tileh": 32,
     "frames": 3
+  },
+  "turtle2": {
+    "sx": 0,
+    "sy": 128,
+    "cols": 2,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 2
+  },
+  "goomba": {
+    "sx": 64,
+    "sy": 128,
+    "cols": 2,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 2
+  },
+  "plant": {
+    "sx": 0,
+    "sy": 160,
+    "cols": 2,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 2
+  },
+  "buzzy": {
+    "sx": 64,
+    "sy": 160,
+    "cols": 2,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 2
+  },
+  "hammer": {
+    "sx": 0,
+    "sy": 192,
+    "cols": 3,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 3
+  },
+  "boss": {
+    "sx": 0,
+    "sy": 224,
+    "cols": 4,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 4
+  },
+  "start": {
+    "sx": 0,
+    "sy": 256,
+    "cols": 4,
+    "tilew": 32,
+    "tileh": 32,
+    "frames": 4
   }
 }
