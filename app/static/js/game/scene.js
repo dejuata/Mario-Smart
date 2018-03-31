@@ -203,7 +203,7 @@ function gameDefault(url, map, manual = true, data=null) {
           col.obj.destroy();
         } else {
           col.obj.p.opacity = .5
-          col.obj.p.collisionMask = null
+          col.obj.p.collisionMask = SPRITE_TILES
         }
       }
     }
@@ -287,16 +287,16 @@ function gameDefault(url, map, manual = true, data=null) {
           }
           if (tile == 4) {
             let option = Q.tilePos(x, y);
-            if (map == 'level1') {
+            if (map == 'level1' || map == 'load') {
               option['sheet'] = Math.random() >= .5 ? 'turtle1' : 'turtle2';
             } else if (map == 'level2') {
               option['sheet'] = Math.random() >= .5 ? 'goomba' : 'plant';
             } else if (map == 'level3') {
-              if (Math.random() < .5) {
+              if (Math.random() < .4) {
                 option['sheet'] = 'buzzy'
-              }else if (Math.random() > .5 && Math.random() < .8) {
+              }else if (Math.random() > .4 && Math.random() < .7) {
                 option['sheet'] = 'turtle1'
-              }else if (Math.random() > .8 && Math.random() < 1) {
+              }else if (Math.random() > .7) {
                 option['sheet'] = 'hammer'
               } else {
                 option['sheet'] = 'plant'
@@ -330,7 +330,7 @@ function gameDefault(url, map, manual = true, data=null) {
     let setup = {
       data: file
     }
-    if (map == 'level1') { setup['tile'] = 'tile' }
+    if (map == 'level1' || map == 'load') { setup['tile'] = 'tile' }
     if (map == 'level2') { setup['tile'] = 'tile1' }
     if (map == 'level3') { setup['tile'] = 'tile2' }
     var level = stage.collisionLayer(new Q.marioMap(setup));

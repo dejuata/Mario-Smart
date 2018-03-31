@@ -75,7 +75,7 @@ class MarioSmart(object):
     if check == 4 and not inmune:
       cost = 7
     elif check == 8 and not start:
-      cost = 20
+      cost = 100
 
     return c + cost
 
