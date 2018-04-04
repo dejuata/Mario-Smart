@@ -18,16 +18,15 @@ def breadth_first_search(mario, back):
   count = 0
   while queue:
     node = queue.popleft()
-    if back :
-      visited.add(node.mario)
     if mario.goal_test(node.mario):
-      end = time() - start
-      return node, count, end
+      return node, count,  time() - start
+    if back :
+      visited.add((node.state_to_tuple(), node.inmune, node.start))
     for child in node.expand(mario):
-      if child.mario not in visited:
+      if (child.state_to_tuple(), child.inmune, child.start) not in visited:
         queue.append(child)
         count += 1
-        print(count)
+
 
 
 

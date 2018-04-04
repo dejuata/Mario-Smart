@@ -97,7 +97,6 @@ $(document).ready(function () {
   });
 
   $('#play').on('click', function () {
-    console.log(back)
     $.ajax({
       url: '/game',
       type: 'POST',

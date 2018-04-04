@@ -22,7 +22,6 @@ def avara_search(mario, back):
   while queue:
 
     h, node=queue.get_nowait()
-    print(h , node)
     if back:
       visited.add(node.mario)
     if mario.goal_test(node.mario):

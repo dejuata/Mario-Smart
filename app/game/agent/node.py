@@ -41,7 +41,7 @@ class Node:
     """
     Successor of a node by an applicable action
     """
-    result = problem.result_of_actions(self.state, action, self.mario)
+    result = problem.result_of_actions((self.state, self.inmune, self.start), action, self.mario)
     next_node = result
     inmune = self.inmune
     start = self.start
@@ -86,6 +86,12 @@ class Node:
 
   def __eq__(self, other):
     return isinstance(other, Node) and self.state == other.state
+
+  def __hash__(self):
+    return hash(self.state)
+
+  def state_to_tuple(self):
+    return tuple(tuple(row) for row in self.state)
 
   def find_mario(self, state):
     matriz = np.array(state)

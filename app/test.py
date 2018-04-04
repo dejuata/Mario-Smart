@@ -56,34 +56,20 @@ level3 = [
 
 initial_state = [
   [1, 1, 1, 1, 1, 1],
-  [1, 2, 1, 0, 5, 1],
+  [1, 0, 0, 0, 5, 1],
   [1, 0, 1, 1, 0, 1],
   [1, 0, 0, 1, 0, 1],
-  [1, 1, 0, 0, 0, 1],
+  [1, 1, 2, 3, 0, 1],
   [1, 1, 1, 1, 1, 1]
 ]
-
-def uniform_cost_search(mario):
-  start = time()
-  queue = Queue.PriorityQueue()
-  queue.put((0, Node(mario.initial)))
-  count = 0
-
-  while queue:
-    node = queue.get_nowait()[1]
-    if mario.goal_test(node.mario):
-      end = time() - start
-      return node, count, end
-    for child in node.expand(mario):
-      queue.put((child.path_cost, child))
-      count += 1
-      # print(count)
 
 mario = MarioSmart(level1)
 
 # Busqueda por amplitud
-result = avara.avara_search(mario, True)
-print(result[0].path_cost)
+# result = dfs.depth_first_search(mario)
+# result = bfs.breadth_first_search(mario, True)
+# result = ucs.uniform_cost_search(mario, True)
+print(result[0].solution())
 
 # print('Mov: {} Depth: {} Nodos: {} Computo: {}'.format(result[0].solution(), result[0].depth, result[1], compute))
 

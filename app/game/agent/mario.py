@@ -42,12 +42,23 @@ class MarioSmart(object):
     Return the new state that results from executing the action in the given state
     """
     x, y = mario[1], mario[0]
-    new_state = deepcopy(state)
+    new_state = deepcopy(state[0])
     position = self.next_position(mario, action)
-    new_state[y][x] = 0
+    old_position = self.initial[y][x]
+
+    if old_position == 2:
+      new_state[y][x] = 0
+    # if state[1] or state[2]:
+    #   new_state[y][x] = 0
+    # if state[2] and old_position == 8:
+    #   new_state[y][x] = 0
+    else:
+      new_state[y][x] = old_position
+
     new_state[position[0]][position[1]] = 2
 
-    check = self.check_position(state=state, y=position[0], x=position[1])
+    check = self.check_position(state=state[0], y=position[0], x=position[1])
+
     if  check == 3:
       return new_state, True
 
@@ -67,12 +78,10 @@ class MarioSmart(object):
     Return the cost of a solution path that arrives at state
     via action, assuming cost c to get up to state.
     """
-    x = mario[1]
-    y = mario[0]
     position = self.next_position(mario, action)
     check = self.check_position(state=state, y=position[0], x=position[1])
     cost = 1
-    if check == 4 and not inmune:
+    if check == 4 and not inmune and not start:
       cost = 7
     if check == 8 and not start:
       cost = 100

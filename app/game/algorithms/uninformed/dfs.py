@@ -19,14 +19,11 @@ def depth_first_search(mario):
 
   while stack:
     node = stack.pop(0)
-    visited.add(node.mario)
     if mario.goal_test(node.mario):
-      end = time() - start
-      return node, count, end
-    children = node.expand(mario)
-    for child in reversed(children):
-      if child.mario not in visited:
+      return node, count, time() - start
+    visited.add((node.state_to_tuple(), node.inmune, node.start))
+    for child in reversed(node.expand(mario)):
+      if (child.state_to_tuple(), child.inmune, child.start) not in visited :
         stack.insert(0, child)
         count += 1
-        print(count)
 
