@@ -10,3 +10,7 @@ Artificial intelligence course project
 Clone the project and execute
 
 `docker-compose up --build`
+
+and go to 
+
+http://localhost:5000/
