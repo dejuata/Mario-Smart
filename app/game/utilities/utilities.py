@@ -1,6 +1,3 @@
-
-from time import time
-
 def format_data(str):
   """
   Gives the required format to load a game scene
@@ -30,3 +27,11 @@ def flat_slice(lst):
       lst[i:i + 1] = lst[i]
   return lst
 
+def find_position(arr, item):
+  """
+  find an item in a list
+  """
+  for i, row in enumerate(arr):
+    for j, value in enumerate(row):
+      if value == item:
+        return(i, j)

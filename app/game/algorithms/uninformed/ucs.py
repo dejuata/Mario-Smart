@@ -18,15 +18,16 @@ def uniform_cost_search(mario, back):
   queue.put((0, Node(mario.initial)))
   visited = set()
   count = 0
-
-  while queue:
-    node = queue.get_nowait()[1]
-    if mario.goal_test(node.mario):
-      return node, count, time() - start
-    if back:
-      visited.add(node.mario)
-    for child in node.expand(mario):
-      if child.mario not in visited:
-        queue.put((child.path_cost, child))
-        count += 1
-
+  try:
+    while queue:
+      node = queue.get_nowait()[1]
+      if mario.goal_test(node.mario):
+        return node, count, time() - start
+      if back:
+        visited.add(node.state_to_tuple())
+      for child in node.expand(mario):
+        if child.state_to_tuple() not in visited:
+          queue.put((child.path_cost, child))
+          count += 1
+  except:
+    return None, count, time() - start

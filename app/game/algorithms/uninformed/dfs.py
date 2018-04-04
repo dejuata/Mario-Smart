@@ -16,14 +16,16 @@ def depth_first_search(mario):
   stack = [Node(mario.initial)]
   visited = set()
   count = 0
-
-  while stack:
-    node = stack.pop(0)
-    if mario.goal_test(node.mario):
-      return node, count, time() - start
-    visited.add((node.state_to_tuple(), node.inmune, node.start))
-    for child in reversed(node.expand(mario)):
-      if (child.state_to_tuple(), child.inmune, child.start) not in visited :
-        stack.insert(0, child)
-        count += 1
+  try:
+    while stack:
+      node = stack.pop(0)
+      if mario.goal_test(node.mario):
+        return node, count, time() - start
+      visited.add(node.mario)
+      for child in reversed(node.expand(mario)):
+        if child.mario not in visited :
+          stack.insert(0, child)
+          count += 1
+  except:
+    return None, count, time() - start
 

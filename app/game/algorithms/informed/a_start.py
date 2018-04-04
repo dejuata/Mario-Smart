@@ -18,21 +18,19 @@ def a_start_search(mario, back):
   queue.put((f, node))
   visited = set()
   count = 0
-
-  while queue:
-    f, node = queue.get_nowait()
-    if back:
-      visited.add(node.mario)
-    if mario.goal_test(node.mario):
-      end = time() - start
-      return node, count, end
-    else:
+  try:
+    while queue:
+      f, node = queue.get_nowait()
+      if mario.goal_test(node.mario):
+        return node, count, time() - start
+      if back:
+        visited.add(node.state_to_tuple())
       for child in node.expand(mario):
-        if child.mario not in visited:
+        if child.state_to_tuple() not in visited:
           f = child.path_cost + mario.h(child)
           queue.put((f, child))
           count += 1
-          print(count)
+  except:
+    return None, count, time() - start
 
-  return None
 

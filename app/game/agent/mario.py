@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Basado en https://www.cs.us.es/cursos/iati-2012/
-import numpy as np
 from copy import deepcopy
+from game.utilities.utilities import find_position
 
 
 class MarioSmart(object):
@@ -10,7 +10,7 @@ class MarioSmart(object):
   def __init__(self, initial, goal=None):
     self.initial = initial
     self.goal = goal
-    self.princess = self.find_position(self.initial, 5)
+    self.princess = find_position(self.initial, 5)
 
   def actions(self, state, mario):
     """
@@ -48,10 +48,10 @@ class MarioSmart(object):
 
     if old_position == 2:
       new_state[y][x] = 0
-    # if state[1] or state[2]:
-    #   new_state[y][x] = 0
-    # if state[2] and old_position == 8:
-    #   new_state[y][x] = 0
+    elif state[1] or state[2]:
+      new_state[y][x] = 0
+    elif state[2] and old_position == 8:
+      new_state[y][x] = 0
     else:
       new_state[y][x] = old_position
 
@@ -97,12 +97,6 @@ class MarioSmart(object):
     y2, x2 = self.princess
 
     return abs(x2 - x1) + abs(y2 - y1)
-
-  @classmethod
-  def find_position(self, state, object):
-    matriz = np.array(state)
-    p = np.where(matriz==object)
-    return (p[0][0], p[1][0])
 
   @classmethod
   def check_position(self, state, x, y):

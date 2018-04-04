@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Basado en https://www.cs.us.es/cursos/iati-2012/
-import numpy as np
+from game.utilities.utilities import find_position as find_mario
 
 class Node:
   """
@@ -19,7 +19,7 @@ class Node:
     self.action = action
     self.path_cost = path_cost
     self.depth = 0
-    self.mario = self.find_mario(self.state)
+    self.mario = find_mario(self.state, 2)
     self.inmune = inmune
     self.start = start
     if parent:
@@ -87,14 +87,7 @@ class Node:
   def __eq__(self, other):
     return isinstance(other, Node) and self.state == other.state
 
-  def __hash__(self):
-    return hash(self.state)
-
   def state_to_tuple(self):
     return tuple(tuple(row) for row in self.state)
 
-  def find_mario(self, state):
-    matriz = np.array(state)
-    p = np.where(matriz==2)
-    return(p[0][0], p[1][0])
 
