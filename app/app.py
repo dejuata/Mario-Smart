@@ -8,7 +8,7 @@ import json
 from game.agent.mario import MarioSmart
 from game.agent.node import Node
 from game.algorithms.uninformed import bfs, dfs, ucs
-from game.algorithms.informed import avara, a_start
+from game.algorithms.informed import avara, a_star
 
 
 app = Flask(__name__)
@@ -40,19 +40,17 @@ def game():
 def run_search(option, back, name='level1',):
   mario = MarioSmart(read_file(name))
   result = ''
-  print(option, 'entro')
 
   if option == '0':
     result = bfs.breadth_first_search(mario, back)
   if option == '1':
     result = dfs.depth_first_search(mario)
   if option == '2':
-
     result = ucs.uniform_cost_search(mario, back)
   if option == '3':
     result = avara.avara_search(mario, back)
   if option == '4':
-    result = a_start.a_start_search(mario, back)
+    result = a_star.a_star_search(mario, back)
 
   return {
     'mov': result[0].solution(),

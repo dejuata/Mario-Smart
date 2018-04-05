@@ -18,18 +18,16 @@ def avara_search(mario, back):
   queue.put((h, node))
   visited = set()
   count = 0
-  try:
-    while queue:
-      node=queue.get_nowait()[1]
-      if mario.goal_test(node.mario):
-        return node, count, time() - start
-      if back:
-        visited.add(node.state_to_tuple())
-      for child in node.expand(mario):
-        if child.state_to_tuple() not in visited:
-          queue.put((mario.h(child), child))
-          count += 1
-  except:
-    return None, count, time() - start
+  while queue:
+    node=queue.get_nowait()[1]
+    if mario.goal_test(node.mario):
+      return node, count, time() - start
+    if back:
+      visited.add(node.state_to_tuple())
+    for child in node.expand(mario):
+      if child.state_to_tuple() not in visited:
+        queue.put((mario.h(child), child))
+        count += 1
+
 
 
